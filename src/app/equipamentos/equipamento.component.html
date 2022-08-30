@@ -36,7 +36,7 @@
               <td>{{ equipamento.numSerie }}</td>
               <td>{{ equipamento.nome }}</td>
               <td>{{ equipamento.precoAquisicao | currency: 'R$ '}}</td>
-              <td>{{ equipamento.dataFabricacao | date:'dd/MM/yyyy'}}</td>
+              <td>{{ equipamento.dataFabricacao | date: 'dd/MM/yyyy'}}</td>
               <td class="d-grid d-md-block">
                 <button
                   (click)="gravar(modal, equipamento)"
@@ -96,13 +96,10 @@
         <label for="dataFabricacao" class="form-label">Data de Fabricação</label>
         <div class="input-group">
           <input
-            formControlName="dataFabricacao"
-            class="form-control"
-            placeholder="yyyy-mm-dd"
-            ngbDatepicker #dp="ngbDatepicker">
-          <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button">
-            <i class="pi pi-calendar"></i>
-          </button>
+          formControlName="dataFabricacao"
+          type="date"
+          class="form-control"
+          required>
         </div>
       </div>
 

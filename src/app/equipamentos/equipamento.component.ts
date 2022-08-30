@@ -28,7 +28,7 @@ export class EquipamentoComponent implements OnInit {
       nome: new FormControl(""),
       precoAquisicao: new FormControl(""),
       dataFabricacao: new FormControl("")
-    })
+    });
   }
 
   get tituloModal(): string {
@@ -39,6 +39,10 @@ export class EquipamentoComponent implements OnInit {
     return this.form.get("id");
   }
 
+  get nome() {
+    return this.form.get("nome");
+  }
+
   get numSerie() {
     return this.form.get("numSerie");
   }
@@ -46,6 +50,7 @@ export class EquipamentoComponent implements OnInit {
   get precoAquisicao() {
     return this.form.get("precoAquisicao");
   }
+
   get dataFabricacao() {
     return this.form.get("dataFabricacao");
   }
@@ -64,6 +69,7 @@ export class EquipamentoComponent implements OnInit {
       else
         await this.equipamentoService.editar(this.form.value);
 
+      console.log(equipamento?.dataFabricacao)
       console.log(`O departamento foi salvo com sucesso`);
 
     } catch (_error) {
