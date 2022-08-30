@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Departamento } from './models/departamento.model';
 import { DepartamentoService } from './services/departamento.service';
@@ -16,7 +17,8 @@ export class DepartamentoComponent implements OnInit {
   constructor(
     private departamentoService: DepartamentoService,
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +61,9 @@ export class DepartamentoComponent implements OnInit {
       else
         await this.departamentoService.editar(this.form.value);
 
+      this.toastr.success("Departamento salvo com sucesso", "Sucesso");
       console.log(`O departamento foi salvo com sucesso`);
+
 
     } catch (_error) {
     }
@@ -67,5 +71,6 @@ export class DepartamentoComponent implements OnInit {
 
   public excluir(departamento: Departamento) {
     this.departamentoService.excluir(departamento);
+    this.toastr.success("Departamento excluido com sucesso", "Sucesso");
   }
 }

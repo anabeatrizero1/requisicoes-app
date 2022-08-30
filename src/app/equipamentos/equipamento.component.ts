@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Equipamento } from './models/equipamento.model';
 import { EquipamentoService } from './services/equipamento.service';
@@ -16,9 +17,10 @@ export class EquipamentoComponent implements OnInit {
   constructor(
     private equipamentoService: EquipamentoService,
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) { }
-
+  
   ngOnInit(): void {
     this.equipamentos$ = this.equipamentoService.selecionarTodos();
 
@@ -70,7 +72,8 @@ export class EquipamentoComponent implements OnInit {
         await this.equipamentoService.editar(this.form.value);
 
       console.log(equipamento?.dataFabricacao)
-      console.log(`O departamento foi salvo com sucesso`);
+      this.toastr.success("Equipamento salvo com sucesso", "Sucesso");
+      console.log(`O equipamento foi salvo com sucesso`);
 
     } catch (_error) {
     }
@@ -78,6 +81,8 @@ export class EquipamentoComponent implements OnInit {
 
   public excluir(equipamento: Equipamento) {
     this.equipamentoService.excluir(equipamento);
+    this.toastr.success("Departamento excluido com sucesso");
+
   }
 
 }
