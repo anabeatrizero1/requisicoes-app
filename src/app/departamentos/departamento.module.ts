@@ -5,6 +5,7 @@ import { DepartamentoRoutingModule } from './departamento-routing.module';
 import { DepartamentoComponent } from './departamento.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DepartamentoService } from './services/departamento.service';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule,
     ReactiveFormsModule,
     DepartamentoRoutingModule
-  ]
+  ],
+  providers: [DepartamentoService]
 })
 export class DepartamentoModule { }

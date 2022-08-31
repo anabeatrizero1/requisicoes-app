@@ -15,9 +15,9 @@ export class DepartamentoComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    private departamentoService: DepartamentoService,
-    private modalService: NgbModal,
     private fb: FormBuilder,
+    private modalService: NgbModal,
+    private departamentoService: DepartamentoService,
     private toastr: ToastrService
   ) { }
 
@@ -61,16 +61,20 @@ export class DepartamentoComponent implements OnInit {
       else
         await this.departamentoService.editar(this.form.value);
 
-      this.toastr.success("Departamento salvo com sucesso", "Sucesso");
-      console.log(`O departamento foi salvo com sucesso`);
-
-
-    } catch (_error) {
+      this.toastr.success("Departamento  salvo com sucesso", "Sucesso");
+    } catch (error) {
+      if(error != "fechar" && error != "0" && error != "1")
+        this.toastr.error("Erro ao tenter salvar Departamento", "Erro");
     }
   }
 
   public excluir(departamento: Departamento) {
-    this.departamentoService.excluir(departamento);
-    this.toastr.success("Departamento excluido com sucesso", "Sucesso");
+    try {
+      this.departamentoService.excluir(departamento);
+      this.toastr.success("Departamento excluído com sucesso", "Sucesso");
+    } catch (error) {
+      this.toastr.error("Erro ao tenter excluir Departamento", "Erro");
+    }
+
   }
 }

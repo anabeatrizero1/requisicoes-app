@@ -15,12 +15,12 @@ export class EquipamentoComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    private equipamentoService: EquipamentoService,
-    private modalService: NgbModal,
     private fb: FormBuilder,
+    private modalService: NgbModal,
+    private equipamentoService: EquipamentoService,
     private toastr: ToastrService
   ) { }
-  
+
   ngOnInit(): void {
     this.equipamentos$ = this.equipamentoService.selecionarTodos();
 
@@ -71,18 +71,21 @@ export class EquipamentoComponent implements OnInit {
       else
         await this.equipamentoService.editar(this.form.value);
 
-      console.log(equipamento?.dataFabricacao)
       this.toastr.success("Equipamento salvo com sucesso", "Sucesso");
-      console.log(`O equipamento foi salvo com sucesso`);
 
-    } catch (_error) {
+    } catch (error) {
+      if(error != "fechar" && error != "0" && error != "1")
+        this.toastr.error("Erro ao tenter salvar Equipamento", "Erro");
     }
   }
 
-  public excluir(equipamento: Equipamento) {
-    this.equipamentoService.excluir(equipamento);
-    this.toastr.success("Departamento excluido com sucesso");
-
+  public async excluir(equipamento: Equipamento) {
+    try {
+      await this.equipamentoService.excluir(equipamento);
+      this.toastr.success("Equipamento excluido com sucesso", "Sucesso");
+    } catch (error) {
+      this.toastr.error("Erro ao tenter excluir equipamento", "Erro");
+    }
   }
 
 }
