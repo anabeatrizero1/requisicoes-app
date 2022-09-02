@@ -19,5 +19,6 @@ import { DepartamentoService } from './services/departamento.service';
     DepartamentoRoutingModule
   ],
   providers: [DepartamentoService]
+
 })
 export class DepartamentoModule { }
