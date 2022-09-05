@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -28,10 +28,10 @@ export class FuncionarioComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       id: new FormControl(""),
-      nome: new FormControl(""),
-      email: new FormControl(""),
-      funcao: new FormControl(""),
-      departamentoId: new FormControl(""),
+      nome: new FormControl("", [Validators.required, Validators.minLength(3)]),
+      email: new FormControl("", [Validators.required, Validators.email]),
+      funcao: new FormControl("", [Validators.required, Validators.minLength(3)]),
+      departamentoId: new FormControl("", [Validators.required]),
       departamento: new FormControl("")
     });
     this.funcionarios$ = this.funcionarioService.selecionarTodos();
@@ -45,6 +45,22 @@ export class FuncionarioComponent implements OnInit {
 
   get id() {
     return this.form.get("id");
+  }
+
+  get nome() {
+    return this.form.get("nome");
+  }
+
+  get email() {
+    return this.form.get("email");
+  }
+
+  get funcao() {
+    return this.form.get("funcao");
+  }
+
+  get departamentoId() {
+    return this.form.get("departamentoId");
   }
 
   public async gravar(modal: TemplateRef<any>, funcionario?: Funcionario) {
@@ -65,13 +81,15 @@ export class FuncionarioComponent implements OnInit {
     try {
       await this.modalService.open(modal).result;
 
-      if(!funcionario)
-        await this.funcionarioService.inserir(this.form.value);
-      else
-        await this.funcionarioService.editar(this.form.value);
+      if (this.form.dirty && this.form.valid){
+        if(!funcionario)
+          await this.funcionarioService.inserir(this.form.value);
+        else
+          await this.funcionarioService.editar(this.form.value);
 
-      this.toastr.success("Funcionário salvo com sucesso", "Sucesso");
-
+        this.toastr.success("Funcionário salvo com sucesso", "Sucesso");
+      }
+      
     } catch (error) {
       if(error != "fechar" && error != "0" && error != "1")
         this.toastr.error("Erro ao tenter salvar Funcionário", "Erro");

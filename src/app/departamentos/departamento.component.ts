@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -26,8 +26,8 @@ export class DepartamentoComponent implements OnInit {
 
     this.form = this.fb.group({
       id: new FormControl(""),
-      nome: new FormControl(""),
-      telefone: new FormControl("")
+      nome: new FormControl("", [Validators.required, Validators.minLength(2)]),
+      telefone: new FormControl("", [Validators.required])
     })
   }
 
@@ -56,12 +56,14 @@ export class DepartamentoComponent implements OnInit {
     try {
       await this.modalService.open(modal).result;
 
-      if(!departamento)
-        await this.departamentoService.inserir(this.form.value);
-      else
-        await this.departamentoService.editar(this.form.value);
+      if (this.form.dirty && this.form.valid){
+        if(!departamento)
+          await this.departamentoService.inserir(this.form.value);
+        else
+          await this.departamentoService.editar(this.form.value);
 
-      this.toastr.success("Departamento  salvo com sucesso", "Sucesso");
+        this.toastr.success("Departamento  salvo com sucesso", "Sucesso");
+      }
     } catch (error) {
       if(error != "fechar" && error != "0" && error != "1")
         this.toastr.error("Erro ao tenter salvar Departamento", "Erro");

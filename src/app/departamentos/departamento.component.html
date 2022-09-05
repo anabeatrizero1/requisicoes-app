@@ -20,7 +20,7 @@
           <i class="pi pi-sign-out me-2"></i>Voltar
         </a>
       </div>
-      
+
       <div class="mt-4">
         <table class="table table-light table-striped table-hover">
           <thead class="thead-dark text-center">
@@ -63,25 +63,36 @@
   </div>
   <form [formGroup]="form" (ngSubmit)="modal.close('gravar')">
     <div class="modal-body">
-      <div class="form-group mb-3">
+
+      <div class="form-group mb-3 position-relative">
         <label for="nome" class="form-label">Nome do Departamento</label>
         <input formControlName="nome"
+          [ngClass]="(nome?.touched && nome?.invalid) ? 'is-invalid' : ''"
           class="form-control"
           type="text"
           placeholder="Digite o nome do departamento">
+          <div class="invalid-tooltip" *ngIf="nome?.touched && nome?.invalid">
+            <span *ngIf="nome?.errors?.['required']"> O nome do departamento precisa ser preenchido.</span>
+            <span *ngIf="nome?.errors?.['minlength']"> O nome precisa ter no mínimo 3 caracteres.</span>
+          </div>
       </div>
 
-      <div class="form-group mb-3">
+      <div class="form-group mb-3 position-relative">
         <label for="telefone" class="form-label">Telefone</label>
         <input formControlName="telefone"
+          [ngClass]="(telefone?.touched && telefone?.invalid) ? 'is-invalid' : ''"
           class="form-control"
           type="text"
           placeholder="Digite o número de telefone do departamento">
+          <div class="invalid-tooltip" *ngIf="telefone?.touched && telefone?.invalid">
+            <span *ngIf="nome?.errors?.['required']"> O telefone do departamento precisa ser preenchido.</span>
+          </div>
       </div>
     </div>
+
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-primary col-md-3" (click)="modal.dismiss('fechar')">Cancelar</button>
-      <button type="submit" class="btn btn-primary col-md-3">Gravar</button>
+      <button type="submit" class="btn btn-primary col-md-3" [disabled]="this.form.invalid">Gravar</button>
     </div>
   </form>
 </ng-template>
