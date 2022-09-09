@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { map, Observable } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { Departamento } from 'src/app/departamentos/models/departamento.model';
 import { Funcionario } from '../models/funcionario.model';
 
@@ -50,4 +50,20 @@ export class FuncionarioService {
         })
       )
   }
+
+  public selecionarFuncionarioLogado(email: string) : Observable<Funcionario> {
+    return this.firestore
+      .collection<Funcionario>('funcionarios', ref => {
+        return ref.where('email', '==', email)
+      })
+      .valueChanges()
+      .pipe(
+        take(1),
+        map(funcionarios => funcionarios[0])
+      )
+  }
+
+
+
+
 }
