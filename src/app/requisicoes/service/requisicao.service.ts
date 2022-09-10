@@ -67,7 +67,7 @@ export class RequisicaoService {
       );
   }
 
-  public selecionarRequisicoesFuncionarioAtual(id: string): Observable<Requisicao[]> {
+  public selecionarRequisicoesFuncionarioAtual(id: string) {
     return this.selecionarTodos()
       .pipe(
         map(requisicoes => {
