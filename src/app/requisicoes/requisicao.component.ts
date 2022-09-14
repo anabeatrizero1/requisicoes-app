@@ -13,7 +13,7 @@ import { EquipamentoService } from '../equipamentos/services/equipamento.service
 import { Funcionario } from '../funcionarios/models/funcionario.model';
 import { FuncionarioService } from '../funcionarios/services/funcionario.service';
 import { Requisicao } from './models/requisicao.model';
-import { RequisicaoService } from './service/requisicao.service';
+import { RequisicaoService } from './services/requisicao.service';
 
 @Component({
   selector: 'app-requisicao',

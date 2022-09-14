@@ -10,7 +10,7 @@ import { Equipamento } from 'src/app/equipamentos/models/equipamento.model';
 import { EquipamentoService } from 'src/app/equipamentos/services/equipamento.service';
 import { FuncionarioService } from 'src/app/funcionarios/services/funcionario.service';
 import { Requisicao } from '../models/requisicao.model';
-import { RequisicaoService } from '../service/requisicao.service';
+import { RequisicaoService } from '../services/requisicao.service';
 
 @Component({
   selector: 'app-requisicoes-funcionario',
@@ -51,6 +51,10 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
 
       equipamentoId: new FormControl(""),
       equipamento: new FormControl(""),
+
+      status: new FormControl(""),
+      ultimaAtualizacao: new FormControl(""),
+      movimetacoes: new FormControl(""),
     })
 
 
@@ -60,9 +64,10 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
       this.funcionarioService.selecionarFuncionarioLogado(email)
       .subscribe(funcionario => {
         this.funcionarioLogadoId = funcionario.id;
+        this.requisicoes$ = this.requisicaoService
+        .selecionarRequisicoesFuncionarioAtual(this.funcionarioLogadoId)
+
       });
-      this.requisicoes$ = this.requisicaoService
-      .selecionarRequisicoesFuncionarioAtual(this.funcionarioLogadoId)
 
     });
 
@@ -80,6 +85,19 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
   get id(): AbstractControl | null {
     return this.form.get("id");
   }
+
+  get descricao() {
+    return this.form.get("descricao");
+  }
+
+  get departamentoId() {
+    return this.form.get("departamentoId");
+  }
+
+  get funcionarioId() {
+    return this.form.get("funcionarioId");
+  }
+
 
   public async gravar(modal: TemplateRef<any>, requisicao?: Requisicao) {
     this.form.reset();
@@ -129,7 +147,9 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
   }
 
   private configurarValoresPadrao(): void {
+    this.form.get("status")?.setValue("Aberta");
     this.form.get("dataAbertura")?.setValue(new Date());
+    this.form.get("ultimaAtualizacao")?.setValue(new Date());
     this.form.get("departamentoId")?.setValue(null);
     this.form.get("funcionarioId")?.setValue(this.funcionarioLogadoId);
   }
