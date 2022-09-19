@@ -51,15 +51,14 @@ export class RequisicoesDepartamentoComponent implements OnInit {
 
     this.departamentos$ = this.departamentoService.selecionarTodos();
     this.equipamentos$ = this.equipamentoService.selecionarTodos();
+    this.requisicoes$ = this.requisicaoService.selecionarTodos()
+
 
     this.processoAutentificado$ = this.authService.usuarioLogado.subscribe(usuario => {
       const email: string = usuario?.email!; // ! significa que sabemos que o usuário não voltara nulo
 
       this.funcionarioService.selecionarFuncionarioLogado(email)
-        .subscribe(funcionario => {
-          this.funcionarioLogado = funcionario;
-          this.requisicoes$ = this.requisicaoService.selecionarRequisicoesPorDepartamentoId(funcionario.departamentoId)
-      });
+        .subscribe(funcionario => this.funcionarioLogado = funcionario);
 
     });
 

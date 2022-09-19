@@ -8,6 +8,7 @@ import { Departamento } from 'src/app/departamentos/models/departamento.model';
 import { DepartamentoService } from 'src/app/departamentos/services/departamento.service';
 import { Equipamento } from 'src/app/equipamentos/models/equipamento.model';
 import { EquipamentoService } from 'src/app/equipamentos/services/equipamento.service';
+import { Funcionario } from 'src/app/funcionarios/models/funcionario.model';
 import { FuncionarioService } from 'src/app/funcionarios/services/funcionario.service';
 import { Requisicao } from '../models/requisicao.model';
 import { RequisicaoService } from '../services/requisicao.service';
@@ -24,7 +25,7 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
   private processoAutentificado$: Subscription;
 
   public form: FormGroup;
-  public funcionarioLogadoId: string;
+  public funcionarioLogado: Funcionario;
 
   constructor(
     private authService: AuthenticationService,
@@ -57,22 +58,18 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
       movimetacoes: new FormControl(""),
     })
 
+    this.departamentos$ = this.departamentoService.selecionarTodos();
+    this.equipamentos$ = this.equipamentoService.selecionarTodos();
+    this.requisicoes$ = this.requisicaoService.selecionarTodos();
 
     this.processoAutentificado$ = this.authService.usuarioLogado.subscribe(usuario => {
       const email: string = usuario?.email!; // ! significa que sabemos que o usuário não voltara nulo
 
       this.funcionarioService.selecionarFuncionarioLogado(email)
-      .subscribe(funcionario => {
-        this.funcionarioLogadoId = funcionario.id;
-        this.requisicoes$ = this.requisicaoService
-        .selecionarRequisicoesFuncionarioAtual(this.funcionarioLogadoId)
-
-      });
+      .subscribe(funcionario => this.funcionarioLogado = funcionario);
 
     });
 
-    this.departamentos$ = this.departamentoService.selecionarTodos();
-    this.equipamentos$ = this.equipamentoService.selecionarTodos();
   }
   ngOnDestroy(): void {
     this.processoAutentificado$.unsubscribe();
@@ -151,7 +148,7 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy{
     this.form.get("dataAbertura")?.setValue(new Date());
     this.form.get("ultimaAtualizacao")?.setValue(new Date());
     this.form.get("departamentoId")?.setValue(null);
-    this.form.get("funcionarioId")?.setValue(this.funcionarioLogadoId);
+    this.form.get("funcionarioId")?.setValue(this.funcionarioLogado.id);
   }
 
 }

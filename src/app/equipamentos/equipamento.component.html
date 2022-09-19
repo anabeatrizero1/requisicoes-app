@@ -71,34 +71,52 @@
       <div class="form-group mb-3">
         <label for="numSerie" class="form-label">Nº de Série</label>
         <input formControlName="numSerie"
+          [ngClass]="(numSerie?.touched && numSerie?.invalid) ? 'is-invalid' : ''"
           class="form-control"
           type="text"
           placeholder="Digite o Nº de série do equipamento">
       </div>
+      <div class="invalid-tooltip" *ngIf="numSerie?.touched && numSerie?.invalid">
+        <span *ngIf="numSerie?.errors?.['requerid']">O número de série precisa ser preechido.</span>
+      </div>
+
 
       <div class="form-group mb-3">
         <label for="nome" class="form-label">Nome</label>
         <input formControlName="nome"
+          [ngClass]="(nome?.touched && nome?.invalid) ? 'is-invalid' : ''"
           class="form-control"
           type="text"
           placeholder="Digite o nome do equipamento">
+      </div>
+      <div class="invalid-tooltip" *ngIf="nome?.touched && nome?.invalid">
+        <span *ngIf="nome?.errors?.['requerid']">O nome do equipamento precisa ser preechido.</span>
       </div>
 
       <div class="form-group mb-3">
         <label for="precoAquisicao" class="form-label">Preço de Aquisição</label>
         <input formControlName="precoAquisicao"
+          [ngClass]="(precoAquisicao?.touched && precoAquisicao?.invalid) ? 'is-invalid' : ''"
           currencyMask  [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left'}"
           class="form-control"
           type="text"
           placeholder="R$ 0,00">
+      </div>
+      <div class="invalid-tooltip" *ngIf="precoAquisicao?.touched && precoAquisicao?.invalid">
+        <span *ngIf="precoAquisicao?.errors?.['requerid']">O preço de aquisição precisa ser preechido.</span>
       </div>
 
       <div class="form-group mb-3">
         <label for="dataFabricacao" class="form-label">Data de Fabricação</label>
         <div class="input-group">
           <input formControlName="dataFabricacao"
+          [ngClass]="(dataFabricacao?.touched && dataFabricacao?.invalid) ? 'is-invalid' : ''"
           type="date"
           class="form-control">
+        </div>
+        <div class="invalid-tooltip" *ngIf="dataFabricacao?.touched && dataFabricacao?.invalid">
+          <span *ngIf="dataFabricacao?.errors?.['requerid']">A data de fabricação precisa ser preechida.</span>
+          <span *ngIf="dataFabricacao?.errors?.['datafurura']">A data de fabricação não pode exceder hoje.</span>
         </div>
       </div>
 
