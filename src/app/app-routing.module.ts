@@ -29,7 +29,7 @@ const routes: Routes = [
     loadChildren: () => import("./requisicoes/requisicao.module")
       .then(m => m.RequisicaoModule),
     canActivate: [AuthGuard]
-  }
+  },
 ];
 
 @NgModule({

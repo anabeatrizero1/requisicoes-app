@@ -12,12 +12,13 @@ import { AuthenticationService } from '../services/authentication.service';
 export class LoginComponent implements OnInit {
   public form: FormGroup;
   public formRecuperacao: FormGroup;
+  public formCadastro: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthenticationService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
     ) {  }
 
   ngOnInit(): void {
@@ -29,6 +30,13 @@ export class LoginComponent implements OnInit {
     this.formRecuperacao = this.formBuilder.group({
       emailRecuperacao: new FormControl("")
     })
+
+    this.formCadastro = this.formBuilder.group({
+      emailCadastro: new FormControl(""),
+      senhaCadastro: new FormControl(""),
+      confirmarSenha: new FormControl("")
+    })
+
   }
   get email(): AbstractControl | null{
     return this.form.get("email");
@@ -38,9 +46,18 @@ export class LoginComponent implements OnInit {
     return this.form.get("senha");
   }
 
+  get emailCadastro(): AbstractControl | null{
+    return this.form.get("emailCadastro");
+  }
+
+  get senhaCadastro(): AbstractControl | null{
+    return this.form.get("senhaCadastro");
+  }
+
   get emailRecuperacao(): AbstractControl | null{
     return this.formRecuperacao.get("emailRecuperacao");
   }
+
 
   public async login(){
     const email = this.email?.value;
@@ -57,6 +74,19 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  public async cadastrar(email: string, senha: string){
+    try {
+      const resposta = await this.authService.cadastrar(email, senha);
+      console.log(resposta);
+      if(resposta?.user) {
+        this.router.navigate(["/painel"]);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   public abrirModalRecuperacao(modal: TemplateRef<any>) {
     this.modalService.open(modal)
       .result
@@ -68,5 +98,21 @@ export class LoginComponent implements OnInit {
       .catch(() => {
         this.formRecuperacao.reset();
       });
+  }
+
+  public abrirModalCadastro(modal: TemplateRef<any>) {
+    const email = this.emailCadastro?.value;
+    const senha = this.senhaCadastro?.value;
+
+    this.modalService.open(modal)
+    .result
+    .then(resultado => {
+      if(resultado === "enviar") {
+        this.authService.cadastrar(email, senha);
+      }
+    })
+    .catch(() => {
+      this.formRecuperacao.reset();
+    });
   }
 }
